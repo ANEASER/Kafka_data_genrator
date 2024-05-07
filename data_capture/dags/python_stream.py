@@ -1,4 +1,10 @@
 from confluent_kafka import Consumer, KafkaError
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+import json
+import requests
+import time
+from datetime import datetime
 
 bootstrap_servers = 'localhost:9092'
 group_id = 'test_group'
@@ -7,23 +13,49 @@ topic = 'time_values'
 conf = {
     'bootstrap.servers': bootstrap_servers,
     'group.id': group_id,
-    'auto.offset.reset': 'earliest'  # Start consuming from the earliest message
+    'auto.offset.reset': 'earliest'  
+}
+
+default_args = {
+    'owner': 'anuda',
+    'start_date': datetime(2023, 5, 5),
 }
 
 
 def push_to_db():
+    consumer = Consumer(conf)
+    consumer.subscribe([topic])
+    file_path = './time_values.txt'
+
+    with open(file_path, 'a') as file:
+                file.write('Starting to capture data\n')
 
     while True:
-        consumer = Consumer(conf)
-        consumer.subscribe([topic])
-        msg = consumer.poll(timeout=1.0)  # Timeout in seconds
+        msg = consumer.poll(timeout=1.0)  
         
-        file_path = './time_values.txt'
-
+        
         if msg is not None:
+            print(msg.value().decode('utf-8'))
             with open(file_path, 'a') as file:
                 file.write(msg.value().decode('utf-8') + '\n')
-        consumer.close()
+        else:
+            with open(file_path, 'a') as file:
+                file.write('No message received\n')
+
+    consumer.close()
 
 
-push_to_db()
+dag = DAG('data_capture',
+         default_args=default_args,
+         description='A DAG to capture data from Kafka',
+         schedule_interval=None,
+)
+
+stream_data = PythonOperator(
+        task_id='stream_data',
+        provide_context=True,
+        python_callable=push_to_db,
+        dag=dag
+    )
+
+stream_data
