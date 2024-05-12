@@ -25,7 +25,7 @@ To run genarator alone
   python3 kafka_stream.py
 ```
 
-To run data captur script
+To run data capture script
 
 either can use airflow dag 
 ```bash
