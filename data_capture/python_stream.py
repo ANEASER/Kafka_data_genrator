@@ -17,7 +17,7 @@ conf = {
 }
 
 default_args = {
-    'owner': 'aneaser',
+    'owner': 'anuda',
     'start_date': datetime(2023, 5, 5),
 }
 
@@ -45,17 +45,4 @@ def push_to_db():
     consumer.close()
 
 
-dag = DAG('data_capture',
-         default_args=default_args,
-         description='A DAG to capture data from Kafka',
-         schedule_interval=None,
-)
-
-stream_data = PythonOperator(
-        task_id='stream_data',
-        provide_context=True,
-        python_callable=push_to_db,
-        dag=dag
-    )
-
-stream_data
+push_to_db()
