@@ -36,3 +36,35 @@ or
 ```bash
  python3 python_stream.py
 ```
+
+
+
+## Customization
+
+you can change the generator_parameters in kafka_stream.py please note to use integer value.
+values json.
+
+- nlb = normal value lower bound
+- nub = normal value upper bound
+- alb = anomaly value lower bound
+- aub = anomaly value upper bound
+- af = anomaly frequency max value is 1000
+
+```python
+
+genarator_parameters = {"nlb": 1, "nub": 100, "alb": 1, "aub": 10, "af": 25}
+
+def get_data():
+    res = requests.post("http://localhost:5000/stream/", json=genarator_parameters)
+    res = res.json()
+    return res
+```
+
+And also you can change the interval of value by customizing the sleep interval 
+
+```python
+
+if __name__ == "__main__":
+    stream_data(2)
+
+```
