@@ -45,8 +45,12 @@ def generate_data_from_request(values: Values):
     
     random_value = generate_random_value(nlb, nub)
 
-    anomalybound = 1000 // af
-    
+
+    if af > 0:
+        anomalybound = 1000 // af
+    else:
+        anomalybound = 0
+
     if random.randint(0, anomalybound) == 1:  # Generate an anomaly value
         random_value = add_random_offset(random_value, alb, aub)
     timestamp = int(time.time())  # Get the current timestamp
