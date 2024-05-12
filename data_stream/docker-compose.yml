@@ -2,7 +2,9 @@ version: '3'
 
 services:
   data-generator:
-    image: datagenarator:latest
+    build:
+      context: .
+      dockerfile: ./datagenarator/Dockerfile
     container_name: datagenarator
     ports:
       - "5000:5000"
