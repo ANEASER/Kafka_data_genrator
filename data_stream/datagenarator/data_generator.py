@@ -51,7 +51,7 @@ def generate_data_from_request(values: Values):
     if random.randint(0, anomalybound) == 1:  # Generate an anomaly value
         random_value = generate_random_value(alb, aub)
     timestamp = int(time.time())  # Get the current timestamp
-    data = {'timestamp': timestamp, 'random_value': random_value}
+    data = {'timestamp': timestamp, 'value': random_value}
     return data
 
 

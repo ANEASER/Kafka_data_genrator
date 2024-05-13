@@ -39,8 +39,7 @@ def push_to_db():
             with open(file_path, 'a') as file:
                 file.write(msg.value().decode('utf-8') + '\n')
         else:
-            with open(file_path, 'a') as file:
-                file.write('No message received\n')
+            print('No message')
 
     consumer.close()
 
