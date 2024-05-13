@@ -30,9 +30,6 @@ def generate_random_value(nlb, nub):
     base_value = random.randint(nlb, nub)  # Generate a random integer between 1 and 100
     return base_value
 
-def add_random_offset(value, alb, aub):
-    return value + random.randint(alb, aub)
-
 @app.post('/stream/')
 def generate_data_from_request(values: Values):
     
@@ -52,7 +49,7 @@ def generate_data_from_request(values: Values):
         anomalybound = 0
 
     if random.randint(0, anomalybound) == 1:  # Generate an anomaly value
-        random_value = add_random_offset(random_value, alb, aub)
+        random_value = generate_random_value(alb, aub)
     timestamp = int(time.time())  # Get the current timestamp
     data = {'timestamp': timestamp, 'random_value': random_value}
     return data
